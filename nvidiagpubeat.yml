@@ -1,0 +1,33 @@
+nvidiagpubeat:
+  # Defines how often an event is sent to the output
+  period: 30s
+  query: "utilization.gpu,utilization.memory,memory.total,memory.free,memory.used,temperature.gpu,pstate"
+  env: "production"
+  # env can be test or production. test is for test purposes to evaluate funcationality of this beat. Switch to production
+  # when you want to run this beat on a Nvidia GPU machine with SMI driver installed.
+
+fields_under_root: true
+fields:
+  site: "mirero.co.kr"
+  tag: nvidiagpubeat
+  rules:
+    - "bluecats"
+
+output.elasticsearch:
+  enabled: false
+
+output.logstash.enabled: false
+
+output.kafka:
+  # initial brokers for reading cluster metadata
+  hosts: ["192.168.60.177:9092"]
+
+  # message topic selection + partitioning
+  topic: 'nvidiagpubeat'
+  partition.round_robin:
+    reachable_only: false
+
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000
+
