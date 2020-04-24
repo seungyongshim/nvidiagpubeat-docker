@@ -19,8 +19,8 @@ jobs:
       run: |
         env
         docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-        docker build . -t mirerosystemkr/nvidiagpubeat:${{ github.ref }}
-        docker push mirerosystemkr/nvidiagpubeat:${{ github.ref }}
+        docker build . -t mirerosystemkr/nvidiagpubeat:${GITHUB_REF##*/}
+        docker push mirerosystemkr/nvidiagpubeat:${GITHUB_REF##*/}
     
     - name: Create Release
       id: create_release
