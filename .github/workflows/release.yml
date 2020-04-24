@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+env:
+  BEAT_VERSION: v0.0.1 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download nvidiagpubeat ${BEAT_VERSION}
+      run: wget "https://github.com/seungyongshim/nvidiagpubeat/releases/download/${BEAT_VERSION}/nvidiagpubeat"
+    - name: Build&Push the Docker image
+      run: |
+        docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+        docker build . -t mirerosystemkr/nvidiagpubeat:${TAG_NAME}
+        docker push mirerosystemkr/nvidiagpubeat:${TAG_NAME}
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: true
+
+        
