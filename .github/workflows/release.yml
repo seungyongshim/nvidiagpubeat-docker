@@ -19,8 +19,8 @@ jobs:
     - name: Build&Push the Docker image
       run: |
         docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-        docker build . -t mirerosystemkr/nvidiagpubeat:$TAG_NAME
-        docker push mirerosystemkr/nvidiagpubeat:$TAG_NAME
+        docker build . -t mirerosystemkr/nvidiagpubeat:${{ github.ref }}
+        docker push mirerosystemkr/nvidiagpubeat:${{ github.ref }}
     
     - name: Create Release
       id: create_release
