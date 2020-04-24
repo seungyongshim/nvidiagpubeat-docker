@@ -19,5 +19,7 @@ jobs:
     - name: Build the Docker image
       run: |
         wget "https://github.com/seungyongshim/nvidiagpubeat/releases/download/${BEAT_VERSION}/nvidiagpubeat"
-        docker build . -t mirerosystemkr/my-image-name:${GITHUB_SHA::8}
+        docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+        docker build . -t mirerosystemkr/nvidiagpubeat:${GITHUB_SHA::8}
+        docker push mirerosystemkr/nvidiagpubeat:${GITHUB_SHA::8}
         
